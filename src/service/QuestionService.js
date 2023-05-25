@@ -3,35 +3,77 @@ import axios from "axios";
 const base_url=`http://localhost:8081/api/v1/question/`;
 
 const  addQuestion = async (questionModel) =>{
-const response = await axios({
-    method : 'POST',
-    url:base_url+`/add-question`,
-    data: question,
-    headers: {"Content-Type": "application/json;charset-UTF-8"}
-});
-
-return await response.data;
-
+    try {
+        const response = await axios({
+            method : 'POST',
+            url:base_url+`/add-question`,
+            data: questionModel,
+            headers: {"Content-Type": "application/json;charset-UTF-8"}
+        });
+        
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 const getAllQuestion = async () =>{
-    const response = await axios.get(base_url+`get-all-question`);
-    const data = await response.data;
-    return data ;
+    try {
+        const response = await axios.get(base_url+`get-all-question`);
+        return response.data ;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+   
 }
 
-const getQuestion = async ()=>{
-    const response = await axios.get(base_url +`/get-question`);
-    const data = await response.json();
-
-    return data ;
+const getAllQuestionByUser = async(userId)=>{
+    try {
+        const response = await axios({
+            method:"GET",
+            url:base_url +`/get-all-question-by-user-id`,
+            params:userId,
+            headers: {"Content-Type": "application/json;charset-UTF-8"}
+        });
+        return response.data;
+    } catch (error) {
+       console.log(error);
+       throw error; 
+    }
 }
 
-const deleteQuestion = async ()=>{
-    const response = await axios.get(base_url +`/delete-question`);
-    const data = await response.data;
-
-    return data ;
+const getQuestion = async (questionId)=>{
+    try {
+        const response = await axios({
+            method:"GET",
+            url:base_url +`/get-question`,
+            params:questionId,
+            headers: {"Content-Type": "application/json;charset-UTF-8"}
+        });
+        return response.data;
+    } catch (error) {
+       console.log(error);
+       throw error; 
+    }
+   
 }
 
-export  {addQuestion , getAllQuestion , getQuestion , deleteQuestion};
+const deleteQuestion = async (questionId)=>{
+    try {
+        const response = await axios({
+            method:"POST",
+            url:base_url +`/delete-question`,
+            data: questionId,
+            headers: {"Content-Type": "application/json;charset-UTF-8"}
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+ 
+}
+
+export  {addQuestion , getAllQuestion, getAllQuestionByUser , getQuestion , deleteQuestion};

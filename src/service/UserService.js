@@ -2,41 +2,79 @@ import axios from "axios";
 
 const base_url=`http://localhost/api/v1/user/`;
 
-const register = async (userModel)=>{
-   const response = await axios({
-        method:"POST",
-        url: base_url+`auth-register`,
-        data: userModel,
-        headers: {"Content-Type": "application/json;charset-UTF-8"}
-    });
+let token = null ;
 
-    return await response.data;
+const register = async (userModel)=>{
+    try {
+        const response = await axios({
+            method:"POST",
+            url: base_url+`auth-register`,
+            data: userModel,
+            headers: {"Content-Type": "application/json;charset-UTF-8"}
+        });
+        token = response.data.token;
+        return await response.data;
+
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+  
    
 }
 
-const login = async (userId)=>{
-    const response = await axios({
-        method:"POST",
-        url:base_url+`auth-login`,
-        data:userId,
-        headers: {"Content-Type": "application/json;charset-UTF-8"}
-    });
-    return await response.data;
+const getToken = ()=>{
+    return token;
 }
+
+const login = async (userId)=>{
+    try {
+        const response = await axios({
+            method:"POST",
+            url:base_url+`auth/login`,
+            data:userId,
+            headers: {"Content-Type": "application/json;charset-UTF-8"}
+        });
+        token = response.data.token;
+        return await response.data;
+   
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}  
 
 const updateUser = async (updateUserModel)=>{
-    const response = await axios({
-        method:"POST",
-        url: base_url+`update-user`,
-        data: updateUserModel,
-        headers: {"Content-Type": "application/json;charset-UTF-8"}
-    });
-
-    return await response.data;
+    try {
+        const response = await axios({
+            method:"POST",
+            url: base_url+`update-user`,
+            data: updateUserModel,
+            headers: {"Content-Type": "application/json;charset-UTF-8"}
+        });
+        return await response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+  
 }
 
-const deleteUser= async ()=>{
+const deleteUser= async (userId)=>{
+    try {
+        const response = await axios({
+            method:"DELETE",
+            url:base_url+`delete-user`,
+            data:userId,
+            headers: {"Content-Type": "application/json;charset-UTF-8"}
+        
+        })
+        return response.data ;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 
 }
 
-export default {addUser,getUser,updateUser,deleteUser} 
+export default {addUser,getToken ,getUser,updateUser,deleteUser} 
